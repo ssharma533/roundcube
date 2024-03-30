@@ -36,9 +36,12 @@ def main():
     du_list = call_du_sub(args.target[0])
     sizes = create_dir_dict(du_list)
     total_size = sum(sizes.values())
+    total_size_hr = total_size / 1024 if args.human_readable else total_size
     for dir_path, size in sizes.items():
         percent = (size / total_size) * 100
-        print(f'{percent:.2f} % {percent_to_graph(percent, args.length)} {size if args.human_readable else size * 1024} {dir_path}')
+        size_hr = size / 1024 if args.human_readable else size
+        print(f'{percent:.2f} % [{percent_to_graph(percent, args.length):<20}] {size_hr:.1f} M    {dir_path}')
+    print(f'Total: {total_size_hr:.1f} M   {args.target[0]}')
 
 if __name__ == '__main__':
     main()
