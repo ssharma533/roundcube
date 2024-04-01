@@ -87,7 +87,7 @@ def create_dir_dict(raw_dat: list) -> dict:
     dictionary_directory = {}
     #Iterates over each line from the raw_dat dictionary.
     for component in raw_dat:
-         # Checks if the component contains a tab character
+        # Checks if the component contains a tab character
         if '\t' in component:
             #Separating the component into size and path by using tab character.
             size_of_dir, path_to_dir = component.split('\t')
@@ -97,35 +97,29 @@ def create_dir_dict(raw_dat: list) -> dict:
         
 def main():
     """
-    Main function to run the program.
-    """
-    # Parse the command-line arguments
-    args = parse_command_args()
-
-    # Get the raw data from the du command
-    raw_data = call_du_sub(args.target[0])
-
-    # Create a dictionary from the raw data
-    directory_dict = create_dir_dict(raw_data)
-
+    This is the main function that executes overall script. """
+    args = parse_command_args() # Parse the command-line arguments
+    raw_data = call_du_sub(args.target[0]) # Get the raw data from the du command
+    directory_dictionary = create_dir_dict(raw_data)  # Creates a dictionary from the raw data using create_dir_dict function.
+    
     # Calculate the total size of the directories
-    total_size = 0
-    for size in directory_dict.values():
-        total_size += size
+    total_size_of_directory = 0
+    for component in directory_dictionary.values():
+        total_size_of_directory += component
 
-    # Initialize an empty string to store the bar graph
-    bar_graph = ''
+    # An empty variable to store bar graph.
+    final_bar_graph = ''
 
-    # Iterate over each directory and its size in the directory_dict
-    for directory, size in directory_dict.items():
-        # Calculate the percentage of the total size that each directory uses
-        percent = (size / total_size) * 100
+    # Iterates over each directory and its size in the directory_dictionary.
+    for directory, size in directory_dictionary.items():
+        # Calculates the percentage of the total size of that directory.
+        percent = (size / total_size_of_directory) * 100
 
-        # Convert the percentage into a bar graph
-        bar = percent_to_graph(percent, args.length)
+        # Convert the percentage into a bar graph using percent_to_graph function.
+        the_bar_graph = percent_to_graph(percent, args.length)
 
         # Add the percentage, bar graph, size, and directory to the bar_graph string
-        bar_graph += f'{percent:.2f} % [{bar:<{args.length}}] {size} {directory}\n'
+        final_bar_graph += str(int(percent * 100) / 100) + "%[" + the_bar_graph + " " * (args.length - len(the_bar_graph)) + "] " + str(size) + " " + directory + "\n"
 
     # Print the bar graph
     print(bar_graph)
@@ -133,6 +127,3 @@ def main():
 # Call the main function
 if __name__ == "__main__":
     main()
-
-
-
