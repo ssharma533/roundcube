@@ -99,7 +99,7 @@ def main():
     """
     This is the main function that executes overall script. """
     args = parse_command_args() # Parse the command-line arguments
-    raw_data = call_du_sub(args.target[0]) # Get the raw data from the du command
+    raw_data = call_du_sub(args.target[0]) # Gets the raw data from the du command using call_du_sub function.
     directory_dictionary = create_dir_dict(raw_data)  # Creates a dictionary from the raw data using create_dir_dict function.
     
     # Calculate the total size of the directories
@@ -111,19 +111,23 @@ def main():
     final_bar_graph = ''
 
     # Iterates over each directory and its size in the directory_dictionary.
-    for directory, size in directory_dictionary.items():
+    for directory in directory_dictionary:
+        #Gets the size of the directory.
+        size_of_directory = directory_dictionary[directory]
+
         # Calculates the percentage of the total size of that directory.
-        percent = (size / total_size_of_directory) * 100
+        percent = (size_of_directory / total_size_of_directory) * 100
 
         # Convert the percentage into a bar graph using percent_to_graph function.
         the_bar_graph = percent_to_graph(percent, args.length)
 
         # Add the percentage, bar graph, size, and directory to the bar_graph string
-        final_bar_graph += str(int(percent * 100) / 100) + "%[" + the_bar_graph + " " * (args.length - len(the_bar_graph)) + "] " + str(size) + " " + directory + "\n"
+        final_bar_graph += str(int(percent * 100) / 100) + "%[" + the_bar_graph + " " * (args.length - len(the_bar_graph)) + "] " + str(size_of_directory) + " " + directory + "\n"
 
     # Print the bar graph
-    print(bar_graph)
+    print(final_bar_graph)
 
 # Call the main function
 if __name__ == "__main__":
     main()
+
