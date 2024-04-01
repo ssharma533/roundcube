@@ -87,12 +87,13 @@ def create_dir_dict(raw_dat: list) -> dict:
     dictionary_directory = {}
     #Iterates over each line from the raw_dat dictionary.
     for component in raw_dat:
-        #Separating the component into size and path by using tab character.
-        size_of_dir, path_to_dir = component.split('\t')
-        # This adds the path to directory and its size to the dictionary. Also, converts the size to an integer.
-        dictionary_directory[path_to_dir] = int(size_of_dir)
+         # Checks if the component contains a tab character
+        if '\t' in component:
+            #Separating the component into size and path by using tab character.
+            size_of_dir, path_to_dir = component.split('\t')
+            # This adds the path to directory and its size to the dictionary. Also, converts the size to an integer.
+            dictionary_directory[path_to_dir] = int(size_of_dir)
     return dictionary_directory # Returns the dictionary.
-
         
 def main():
     """
