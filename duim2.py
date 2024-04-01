@@ -95,24 +95,43 @@ def create_dir_dict(raw_dat: list) -> dict:
 
         
 def main():
-    """ 
-    This functions is the main function that executes and runs the overall script."""
-
-    # This parses the arguments.
+    """
+    Main function to run the program.
+    """
+    # Parse the command-line arguments
     args = parse_command_args()
-    raw_dat = call_du_sub(args.target[0]) # Use of call_du_sub function to execute given du command which returns the output as list.
-    dictionary_from_directory = create_dir_dict(raw_dat) #Use of create_dir_dict function.
-    
-    #Calculates total size of directories.
-    total_dir_size = 0 #Puts initial value as 0.
-    #Uses for loop to calculate the total size.
-    for a_size in dictionary_from_directory.values():
-        total_dir_size += a_size
-    
-    #Creates bar garph using the graph function.
-    final_bar_graph = percent_to_graph(dictionary_from_directory, args.length)
 
-    print(final_bar_graph) #Prints bar graph.
+    # Get the raw data from the du command
+    raw_data = call_du_sub(args.target[0])
 
-if __name__ == '__main__':
+    # Create a dictionary from the raw data
+    directory_dict = create_dir_dict(raw_data)
+
+    # Calculate the total size of the directories
+    total_size = 0
+    for size in directory_dict.values():
+        total_size += size
+
+    # Initialize an empty string to store the bar graph
+    bar_graph = ''
+
+    # Iterate over each directory and its size in the directory_dict
+    for directory, size in directory_dict.items():
+        # Calculate the percentage of the total size that each directory uses
+        percent = (size / total_size) * 100
+
+        # Convert the percentage into a bar graph
+        bar = percent_to_graph(percent, args.length)
+
+        # Add the percentage, bar graph, size, and directory to the bar_graph string
+        bar_graph += f'{percent:.2f} % [{bar:<{args.length}}] {size} {directory}\n'
+
+    # Print the bar graph
+    print(bar_graph)
+
+# Call the main function
+if __name__ == "__main__":
     main()
+
+
+
