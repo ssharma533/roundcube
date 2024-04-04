@@ -122,47 +122,37 @@ def create_dir_dict(raw_dat: list) -> dict:
             dictionary_directory[path_to_dir] = int(size_of_dir)
     return dictionary_directory # Returns the dictionary.
         
-def format_final_bar_graph(final_bar_graph):
+
+def format_final_bar_graph(final_bar_graph, human_readable=False):
     """
-    This function takes a list of tuples containing directory information
-    and formats it into a human-readable string.
+    This function formats the final bar graph for display.
     """
     output = "Directory     Size    Bar Graph\n"
     output += "-------------------------------\n"
     for directory, size, bar in final_bar_graph:
+        if human_readable:
+            size = bytes_to_human_r(size)
         output += f"{directory:<15}{size:<8}{bar}\n"
     return output
 
 def main():
-    """
-    This is the main function that executes the overall script.
-    """
-    args = parse_command_args()  # This parses the command-line arguments.
-    raw_data = call_du_sub(args.target[0])  # Gets the raw data from the du command using call_du_sub function.
-    directory_dictionary = create_dir_dict(raw_data)  # Creates a dictionary from the raw data using create_dir_dict function.
+    args = parse_command_args()
+    raw_data = call_du_sub(args.target[0])
+    directory_dictionary = create_dir_dict(raw_data)
 
-    # Calculates the total size of the directories
     total_size_of_directory = sum(directory_dictionary.values())
-
-    # An empty list is created to store tuples for the bar graph.
     final_bar_graph = []
 
-    # Iterates over each directory and its size in the directory_dictionary.
     for directory, size_of_directory in directory_dictionary.items():
-        # To use threshold for the size of directory.
         if size_of_directory >= args.threshold:
-            # Calculates the percentage of the total size of that directory.
             percent = (size_of_directory / total_size_of_directory) * 100
+            bar_graph = percent_to_graph(percent, args.length)
+            final_bar_graph.append((directory, size_of_directory, bar_graph))
 
-            # Converts the percentage into a bar graph using percent_to_graph function.
-            the_bar_graph = percent_to_graph(percent, args.length)
-
-            # Adds the directory, size, and bar graph to the final_bar_graph list as a tuple.
-            final_bar_graph.append((directory, f"{size_of_directory}B", the_bar_graph))
-
-    # Now you can format and print the bar graph using the format_final_bar_graph function
-    formatted_output = format_final_bar_graph(final_bar_graph)
+    formatted_output = format_final_bar_graph(final_bar_graph, args.human_readable)
     print(formatted_output)
+
+
 
 
 
