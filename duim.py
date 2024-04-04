@@ -127,13 +127,21 @@ def format_final_bar_graph(final_bar_graph, human_readable=False):
     """
     This function formats the final bar graph for display.
     """
-    output = "Directory     Size    Bar Graph\n"
-    output += "-------------------------------\n"
+    # Find the longest directory name and size for formatting
+    max_dir_length = max(len(directory) for directory, _, _ in final_bar_graph)
+    max_size_length = max(len(str(size)) for _, size, _ in final_bar_graph if not human_readable) or \
+                      max(len(bytes_to_human_r(size)) for _, size, _ in final_bar_graph if human_readable)
+
+    header = f"{'Directory':<{max_dir_length}} {'Size':<{max_size_length}} Bar Graph\n"
+    output = header + '-' * (len(header) - 1) + '\n'
+
     for directory, size, bar in final_bar_graph:
         if human_readable:
             size = bytes_to_human_r(size)
-        output += f"{directory:<15}{size:<8}{bar}\n"
+        output += f"{directory:<{max_dir_length}} {size:<{max_size_length}} {bar}\n"
     return output
+
+
 
 def main():
     args = parse_command_args()
