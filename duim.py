@@ -123,12 +123,13 @@ def create_dir_dict(raw_dat: list) -> dict:
     return dictionary_directory # Returns the dictionary.
         
 
-def format_final_bar_graph(bar_graph, size_of_dir, directory):
+def format_final_bar_graph(percent, bar_graph, size_of_dir, directory):
     """
     This functions returns the formatted output of final bar graph.
     """
+    percent_str = f"{percent:.2f} %"
     size_str = str(size_of_dir)
-    output = bar_graph + " " + size_str + " " + directory
+    output = percent_str + " " + bar_graph + " " + size_str + " " + directory
     return output
 
 def main():
@@ -159,9 +160,14 @@ def main():
             the_bar_graph = percent_to_graph(percent, args.length)
 
             # Adds the formatted output to the final_bar_graph string.
-            final_bar_graph += format_final_bar_graph(the_bar_graph, size_of_directory, directory) + "\n"
+            final_bar_graph += format_final_bar_graph(percent, the_bar_graph, size_of_directory, directory) + "\n"
    
     print(final_bar_graph)
+
+# Calls the main function
+if __name__ == "__main__":
+    main()
+
 
 # Calls the main function
 if __name__ == "__main__":
