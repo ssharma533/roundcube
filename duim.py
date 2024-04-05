@@ -122,7 +122,8 @@ def create_dir_dict(raw_dat: list) -> dict:
             dictionary_directory[path_to_dir] = int(size_of_dir)
     return dictionary_directory # Returns the dictionary.
         
-def format_final_bar_graph(final_bar_graph):
+
+   def format_final_bar_graph(final_bar_graph):
     """
     This functions returns the formatted output of final bar graph.
     """
@@ -167,6 +168,8 @@ def main():
     # Prints the bar graph
     formatted_output = format_final_bar_graph(final_bar_graph)        
     print(formatted_output)
+
+
 
 
 
