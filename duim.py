@@ -122,19 +122,23 @@ def create_dir_dict(raw_dat: list) -> dict:
             dictionary_directory[path_to_dir] = int(size_of_dir)
     return dictionary_directory # Returns the dictionary.
         
+
 def format_final_bar_graph(final_bar_graph):
     """
     This function returns the formatted output of the final bar graph.
     """
-    output = "Directory     Size    Bar Graph\n"
-    output += "-------------------------------\n"
+    output = "{:<20} {:>10} {}\n".format("Directory", "Size", "Bar Graph")
+    output += "-" * 50 + "\n"
+
     for directory, size, bar in final_bar_graph:
-        output += f"{directory:15} {size:8} {bar}\n"
+        output += "{:<20} {:>10} {}\n".format(directory, size, bar)
     return output
 
 def main():
     args = parse_command_args()
-    raw_data = call_du_sub(args.target)
+    # Ensure that target is a string, not a list
+    target_directory = args.target if isinstance(args.target, str) else args.target[0]
+    raw_data = call_du_sub(target_directory)
     directory_dictionary = create_dir_dict(raw_data)
     
     total_size_of_directory = sum(directory_dictionary.values())
@@ -143,12 +147,14 @@ def main():
     for directory, size_of_directory in directory_dictionary.items():
         if size_of_directory >= args.threshold:
             percent = (size_of_directory / total_size_of_directory) * 100
-            the_bar_graph = percent_to_graph(percent, args.length)
-            bar_graph_str = f"{int(percent)}%    [{the_bar_graph}{' ' * (args.length - len(the_bar_graph))}]"
-            final_bar_graph.append((directory, size_of_directory, bar_graph_str))
+            bar_graph_str = percent_to_graph(percent, args.length)
+            formatted_size = format_size(size_of_directory, args.human_readable)
+            final_bar_graph.append((directory, formatted_size, bar_graph_str))
    
     formatted_output = format_final_bar_graph(final_bar_graph)        
     print(formatted_output)
+
+
 
 
 
