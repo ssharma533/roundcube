@@ -123,10 +123,12 @@ def create_dir_dict(raw_dat: list) -> dict:
     return dictionary_directory # Returns the dictionary.
         
 
-def format_output(percent, bar_graph, size, directory):
-    percent_str = f"{percent:.2f} %"
-    size_str = str(size)
-    output = percent_str.ljust(10) + bar_graph.ljust(25) + size_str.ljust(10) + directory
+def format_final_bar_graph(bar_graph, size_of_dir, directory):
+    """
+    This functions returns the formatted output of final bar graph.
+    """
+    size_str = str(size_of_dir)
+    output = bar_graph + " " + size_str + " " + directory
     return output
 
 def main():
@@ -148,6 +150,7 @@ def main():
     for directory in directory_dictionary:
         #Gets the size of the directory.
         size_of_directory = directory_dictionary[directory]
+        # To use threshold for the size of directory.
         if size_of_directory >= args.threshold:
             # Calculates the percentage of the total size of that directory.
             percent = (size_of_directory / total_size_of_directory) * 100
@@ -156,20 +159,22 @@ def main():
             the_bar_graph = percent_to_graph(percent, args.length)
 
             # Adds the formatted output to the final_bar_graph string.
-            final_bar_graph += format_output(percent, the_bar_graph, size_of_directory, directory) + "\n"
-
-    # Prints the bar graph
+            final_bar_graph += format_final_bar_graph(the_bar_graph, size_of_directory, directory) + "\n"
+   
     print(final_bar_graph)
-
-
-
-
-
-
-
-
-
 
 # Calls the main function
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
+
+
+
+
+
