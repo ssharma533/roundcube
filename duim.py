@@ -127,9 +127,10 @@ def format_final_bar_graph(percent, bar_graph, size_of_dir, directory):
     """
     This functions returns the formatted output of final bar graph.
     """
-    percent_str = f"{percent:.2f} %"
-    size_str = str(size_of_dir)
-    output = percent_str + " " + bar_graph + " " + size_str + " " + directory
+    percent_string = str(percent) + " %"
+
+    size_string = bytes_to_human_r(size_of_dir)
+    output = percent_string + " " + bar_graph + " " + size_string + " " + directory
     return output
 
 def main():
@@ -159,15 +160,13 @@ def main():
             # Converts the percentage into a bar graph using percent_to_graph function.
             the_bar_graph = percent_to_graph(percent, args.length)
 
+            # Adds the percentage to the bar graph string.
+            the_bar_graph = str(int(percent * 100) / 100) + "%    [" + the_bar_graph + " " * (args.length - len(the_bar_graph)) + "]"
+
             # Adds the formatted output to the final_bar_graph string.
             final_bar_graph += format_final_bar_graph(percent, the_bar_graph, size_of_directory, directory) + "\n"
    
     print(final_bar_graph)
-
-# Calls the main function
-if __name__ == "__main__":
-    main()
-
 
 # Calls the main function
 if __name__ == "__main__":
